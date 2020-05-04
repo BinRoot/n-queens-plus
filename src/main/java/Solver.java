@@ -9,14 +9,14 @@ import java.util.stream.IntStream;
  */
 public class Solver {
 
-    private final int mBoardSize;
-    private final List<int[]> mAttackVectors;
-    private final List<int[]> mScanVectors;
+    private final int BOARD_SIZE;
+    private final List<int[]> ATTACK_VECTORS;
+    private final List<int[]> SCAN_VECTORS;
 
     Solver(final int boardSize) {
-        mBoardSize = boardSize;
-        mAttackVectors = List.of(new int[] {1, 1}, new int[] {1, -1});
-        mScanVectors = CommonUtils.generateDiagonalVectors(boardSize);
+        BOARD_SIZE = Math.max(0, boardSize);
+        ATTACK_VECTORS = List.of(new int[] {1, 1}, new int[] {1, -1});
+        SCAN_VECTORS = CommonUtils.generateDiagonalVectors(boardSize);
     }
 
     /**
@@ -37,15 +37,18 @@ public class Solver {
      * @return optional board if solution found
      */
     public Optional<Board> solve() {
-        Board board = new Board(mBoardSize);
+        if (BOARD_SIZE <= 0) {
+            return Optional.empty();
+        }
+        Board board = new Board(BOARD_SIZE);
         Stack<PartialSolution> candidates = new Stack<>();
         candidates.push(new PartialSolution(board, 0));
         while (!candidates.empty()) {
             PartialSolution currentPartialSolution = candidates.pop();
-            if (currentPartialSolution.col >= mBoardSize) {
+            if (currentPartialSolution.col >= BOARD_SIZE) {
                 return Optional.of(currentPartialSolution.board);
             }
-            for (int rowIdx = 0; rowIdx < mBoardSize; rowIdx++) {
+            for (int rowIdx = 0; rowIdx < BOARD_SIZE; rowIdx++) {
                 if (isSafe(currentPartialSolution.board, rowIdx, currentPartialSolution.col)) {
                     candidates.push(new PartialSolution(
                             new Board(currentPartialSolution.board).placeQueen(rowIdx, currentPartialSolution.col),
@@ -64,10 +67,14 @@ public class Solver {
      * @return whether queen is attacking another queen
      */
     boolean isSafe(final Board board, final int row, final int col) {
+        if (board == null) {
+            return false;
+        }
+
         // check horizontal lines
-        List<Integer> horizontalLine = new ArrayList<>(mBoardSize);
-        for (int colIdx = 0; colIdx < mBoardSize; colIdx++) {
-            horizontalLine.add(CommonUtils.getRowMajor(row, colIdx, mBoardSize));
+        List<Integer> horizontalLine = new ArrayList<>(BOARD_SIZE);
+        for (int colIdx = 0; colIdx < BOARD_SIZE; colIdx++) {
+            horizontalLine.add(CommonUtils.getRowMajor(row, colIdx, BOARD_SIZE));
         }
         boolean isSafeFromHorizontalAttacks = board.isSafe(horizontalLine, true, row, col);
         if (!isSafeFromHorizontalAttacks) {
@@ -75,13 +82,13 @@ public class Solver {
         }
 
         // check all diagonals
-        for (int[] vector : mAttackVectors) {
-            if (!board.isSafe(CommonUtils.getLeftLineFromVector(vector, row, col, mBoardSize), true, row, col)) {
+        for (int[] vector : ATTACK_VECTORS) {
+            if (!board.isSafe(CommonUtils.getLeftLineFromVector(vector, row, col, BOARD_SIZE), true, row, col)) {
                 return false;
             }
         }
-        for (int[] vector : mScanVectors) {
-            if (!board.isSafe(CommonUtils.getLeftLineFromVector(vector, row, col, mBoardSize), false, row, col)) {
+        for (int[] vector : SCAN_VECTORS) {
+            if (!board.isSafe(CommonUtils.getLeftLineFromVector(vector, row, col, BOARD_SIZE), false, row, col)) {
                 return false;
             }
         }
@@ -97,6 +104,6 @@ public class Solver {
         if (board == null || !board.isFull()) {
             return false;
         }
-        return IntStream.range(0, mBoardSize).allMatch(col -> isSafe(board, board.getRowFromColumn(col), col));
+        return IntStream.range(0, BOARD_SIZE).allMatch(col -> isSafe(board, board.getRowFromColumn(col), col));
     }
 }

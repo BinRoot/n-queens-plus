@@ -10,24 +10,24 @@ public class Board {
     /**
      * List of queen position rows indexed by column
      */
-    private final List<Integer> mQueenRows;
+    private final List<Integer> QUEEN_ROW_BY_COL;
 
-    private final int mSize;
+    private final int SIZE;
     static final int INVALID_ROW = -1;
 
     Board(final int n) {
-        mSize = n;
-        mQueenRows = new ArrayList<>(Collections.nCopies(n, INVALID_ROW));
+        SIZE = Math.max(n, 0);
+        QUEEN_ROW_BY_COL = new ArrayList<>(Collections.nCopies(n, INVALID_ROW));
     }
 
     Board(final List<Integer> queenRows) {
-        mSize = queenRows.size();
-        mQueenRows = new ArrayList<>(queenRows);
+        SIZE = queenRows != null ? queenRows.size() : 0;
+        QUEEN_ROW_BY_COL = queenRows != null ? new ArrayList<>(queenRows) : new ArrayList<>();
     }
 
     @SuppressWarnings("CopyConstructorMissesField")
     Board(final Board board) {
-        this(board.mQueenRows);
+        this(board.QUEEN_ROW_BY_COL);
     }
 
     /**
@@ -40,20 +40,20 @@ public class Board {
      */
     boolean isSafe(final List<Integer> line, final boolean isTraditionalCheck,
                           final int rowToIgnore, final int colToIgnore) {
-        if (mQueenRows.isEmpty()) {
+        if (QUEEN_ROW_BY_COL.isEmpty()) {
             return false;
         }
         int numQueens = 0;
         for (Integer rowCol : line) {
-            int row = CommonUtils.getRow(rowCol, mSize);
-            int col = CommonUtils.getCol(rowCol, mSize);
+            int row = CommonUtils.getRow(rowCol, SIZE);
+            int col = CommonUtils.getCol(rowCol, SIZE);
             if (row == rowToIgnore && col == colToIgnore) {
                 continue;
             }
-            if (!CommonUtils.isOnBoard(row, col, mSize)) {
+            if (!CommonUtils.isOnBoard(row, col, SIZE)) {
                 continue;
             }
-            if (row == mQueenRows.get(col)) {
+            if (row == QUEEN_ROW_BY_COL.get(col)) {
                 numQueens++;
                 if (isTraditionalCheck || numQueens > 1) {
                     return false;
@@ -70,15 +70,15 @@ public class Board {
      * @return    self
      */
     Board placeQueen(final int row, final int col) {
-        if (CommonUtils.isOnBoard(row, col, mSize)) {
-            mQueenRows.set(col, row);
+        if (CommonUtils.isOnBoard(row, col, SIZE)) {
+            QUEEN_ROW_BY_COL.set(col, row);
         }
         return this;
     }
 
     @SuppressWarnings("unused")
     void print() {
-        System.out.println(mQueenRows);
+        System.out.println(QUEEN_ROW_BY_COL);
     }
 
     /**
@@ -87,8 +87,8 @@ public class Board {
      * @return    row index
      */
     int getRowFromColumn(final int col) {
-        if (col >= 0 && col < mSize) {
-            return mQueenRows.get(col);
+        if (col >= 0 && col < SIZE) {
+            return QUEEN_ROW_BY_COL.get(col);
         } else {
             return -1;
         }
@@ -98,9 +98,9 @@ public class Board {
      * @return whether board is full of queens
      */
     boolean isFull() {
-        if (mQueenRows.isEmpty()) {
+        if (QUEEN_ROW_BY_COL.isEmpty()) {
             return false;
         }
-        return mQueenRows.stream().noneMatch(row -> row == INVALID_ROW);
+        return QUEEN_ROW_BY_COL.stream().noneMatch(row -> row == INVALID_ROW);
     }
 }

@@ -19,6 +19,17 @@ public class TestNQueens {
     }
 
     /**
+     * Solve with board size 0 or negative
+     */
+    @Test
+    public void solveSizeInvalid() {
+        Solver solver = new Solver(0);
+        solver.solve().ifPresent(board -> Assert.fail());
+        solver = new Solver(-1);
+        solver.solve().ifPresent(board -> Assert.fail());
+    }
+
+    /**
      * Solve with board size 5, but should expect no solution
      */
     @Test
