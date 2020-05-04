@@ -6,9 +6,14 @@ import java.util.List;
  * Represents a chess-board of size n.
  */
 public class Board {
+
+    /**
+     * List of queen position rows indexed by column
+     */
     private final List<Integer> mQueenRows;
+
     private final int mSize;
-    public static final int INVALID_ROW = -1;
+    static final int INVALID_ROW = -1;
 
     Board(final int n) {
         mSize = n;
@@ -33,7 +38,7 @@ public class Board {
      * @param colToIgnore        column index of a grid that will be ignored
      * @return                   whether a position is safe
      */
-    public boolean isSafe(final List<Integer> line, final boolean isTraditionalCheck,
+    boolean isSafe(final List<Integer> line, final boolean isTraditionalCheck,
                           final int rowToIgnore, final int colToIgnore) {
         if (mQueenRows.isEmpty()) {
             return false;
@@ -64,7 +69,7 @@ public class Board {
      * @param col column index of a grid
      * @return    self
      */
-    public Board placeQueen(final int row, final int col) {
+    Board placeQueen(final int row, final int col) {
         if (CommonUtils.isOnBoard(row, col, mSize)) {
             mQueenRows.set(col, row);
         }
@@ -72,7 +77,7 @@ public class Board {
     }
 
     @SuppressWarnings("unused")
-    public void print() {
+    void print() {
         System.out.println(mQueenRows);
     }
 
@@ -81,7 +86,7 @@ public class Board {
      * @param col column index of a grid
      * @return    row index
      */
-    public int getRowFromColumn(final int col) {
+    int getRowFromColumn(final int col) {
         if (col >= 0 && col < mSize) {
             return mQueenRows.get(col);
         } else {
@@ -92,7 +97,7 @@ public class Board {
     /**
      * @return whether board is full of queens
      */
-    public boolean isFull() {
+    boolean isFull() {
         if (mQueenRows.isEmpty()) {
             return false;
         }

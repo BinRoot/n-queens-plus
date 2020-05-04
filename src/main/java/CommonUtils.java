@@ -16,7 +16,7 @@ public class CommonUtils {
      * @param b an integer
      * @return  the greatest common divisor of a and b
      */
-    public static int gcd(int a, int b) {
+    static int gcd(int a, int b) {
         while (b != 0) {
             int t = a;
             a = b;
@@ -30,7 +30,7 @@ public class CommonUtils {
      * @param n size of the board
      * @return  list of [dx, dy] pairs representing the slope of the line. dx and dy will be always be co-prime.
      */
-    public static ArrayList<int[]> generateDiagonalVectors(final int n) {
+    static ArrayList<int[]> generateDiagonalVectors(final int n) {
         ArrayList<int[]> vectors = new ArrayList<>();
         IntStream.range(1, 1 + n / 2).forEach(dx -> {
             IntStream.range(1, 1 + n / 2).forEach(dy -> {
@@ -49,7 +49,7 @@ public class CommonUtils {
      * @param size   size of the row
      * @return       row index
      */
-    public static int getRow(final int rowCol, final int size) {
+    static int getRow(final int rowCol, final int size) {
         return rowCol / size;
     }
 
@@ -59,7 +59,7 @@ public class CommonUtils {
      * @param size   size of the row
      * @return       column index
      */
-    public static int getCol(final int rowCol, final int size) {
+    static int getCol(final int rowCol, final int size) {
         return rowCol % size;
     }
 
@@ -70,7 +70,7 @@ public class CommonUtils {
      * @param size size of the row
      * @return     index of a grid in row-major order
      */
-    public static int getRowMajor(final int row, final int col, final int size) {
+    static int getRowMajor(final int row, final int col, final int size) {
         if (row >= size || col >= size || row < 0 || col < 0) {
             return -1;
         }
@@ -85,7 +85,7 @@ public class CommonUtils {
      * @param size   size of the row
      * @return       index of a grid in row-major order, after being moved
      */
-    public static int addVector(int rowCol, int dx, int dy, int size) {
+    static int addVector(int rowCol, int dx, int dy, int size) {
         return getRowMajor(getRow(rowCol, size) + dy, getCol(rowCol, size) + dx, size);
     }
 
@@ -96,7 +96,7 @@ public class CommonUtils {
      * @param size size of the row
      * @return     whether position is on the board
      */
-    public static boolean isOnBoard(int row, int col, int size) {
+    static boolean isOnBoard(int row, int col, int size) {
         return row >= 0 && row < size && col >= 0 && col < size;
     }
 
@@ -109,7 +109,7 @@ public class CommonUtils {
      * @param size   size of the row
      * @return       list of positions, represented in row-major order, of the line
      */
-    public static List<Integer> getLeftLineFromVector(final int[] vector, final int row, final int col, final int size) {
+    static List<Integer> getLeftLineFromVector(final int[] vector, final int row, final int col, final int size) {
         int numSquares = size * size;
         List<Integer> line = new ArrayList<>(size);
         int dx = vector[0];

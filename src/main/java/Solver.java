@@ -63,7 +63,7 @@ public class Solver {
      * @param col column number starts at 0, unlike in typical chess notation
      * @return whether queen is attacking another queen
      */
-    public boolean isSafe(final Board board, final int row, final int col) {
+    boolean isSafe(final Board board, final int row, final int col) {
         // check horizontal lines
         List<Integer> horizontalLine = new ArrayList<>(mBoardSize);
         for (int colIdx = 0; colIdx < mBoardSize; colIdx++) {
@@ -93,7 +93,7 @@ public class Solver {
      * @param board
      * @return whether a board is solved
      */
-    public boolean isValid(final Board board) {
+    boolean isValid(final Board board) {
         if (board == null || !board.isFull()) {
             return false;
         }
